@@ -1,16 +1,13 @@
-let currentColumn, $dropZone;
-
 // Stores a column number based on mouse position
 // Provides a visual cue for the current player and the column they're over
-$(document).on("mousemove", function (e) {
-  $dropZone = $("#token-drop-zone");
+const showCurrentColumn = (e) => {
   currentColumn = Math.floor((e.clientX - $gameBoard.offset().left) / 70);
   currentColumn < 0
     ? (currentColumn = 0)
     : currentColumn > 6
     ? (currentColumn = 6)
     : currentColumn;
-  $dropZone
+  $("#token-drop-zone")
     .css({
       top: "4px",
       left: function () {
@@ -21,12 +18,12 @@ $(document).on("mousemove", function (e) {
       },
     })
     .addClass("disc");
-});
+};
 
 // Updates the game board with the player's move if a space is available
-$(document).on("click", function () {
+const placeToken = () => {
   if (takeMove(currentColumn)) {
-    const drawToken = $("<div>")
+    $("<div>")
       .addClass(function () {
         return currentPlayer === 1 ? `player2 disc` : `player1 disc`; // function has run and updated player already, logic swapped
       })
@@ -39,13 +36,14 @@ $(document).on("click", function () {
         },
       })
       .appendTo($gameBoard);
-    if (checkForVictory() != 0) {
-      checkForVictory() === 1 ? ggNoRe(1) : ggNoRe(2);
+    checkForVictory();
+    if (winningPlayer === 1 || winningPlayer === -1) {
+      winningPlayer === 1 ? ggNoRe(1) : ggNoRe(2);
     }
   }
-});
+};
 
-// Victory state - displays a page depending on who won
+// Victory state - displays who's won the game
 const ggNoRe = (player) => {
   $(document).off("click");
   const background = () => {
@@ -91,3 +89,6 @@ const ggNoRe = (player) => {
     location.reload();
   });
 };
+$(document).ready(setTheScene);
+$(document).on("mousemove", showCurrentColumn);
+$(document).on("click", placeToken);
