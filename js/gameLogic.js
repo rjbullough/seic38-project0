@@ -1,5 +1,6 @@
 let currentPlayer = 1,
-  rowNumber;
+  rowNumber,
+  $gameBoard;
 const boardArray = [];
 
 // Set the starting game state

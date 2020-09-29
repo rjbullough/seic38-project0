@@ -1,4 +1,4 @@
-let currentColumn, $gameBoard, $dropZone;
+let currentColumn, $dropZone;
 
 // Stores a column number based on mouse position
 // Provides a visual cue for the current player and the column they're over
