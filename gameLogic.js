@@ -5,7 +5,8 @@ const boardArray = [];
 // Set the starting game state
 $(document).ready(function () {
   $gameBoard = $("#game-board");
-  const newBoardArray = () => {
+  newBoardArray = () => {
+    $("#game-board").html("");
     for (let i = 0; i < 6; i++) {
       boardArray[i] = [];
       for (let j = 0; j < 7; j++) {
@@ -16,7 +17,7 @@ $(document).ready(function () {
   newBoardArray();
 });
 
-// Fills the first available row in the specified column with the current players token
+// Fills the first available row in the specified column with the current player's token
 // Stores row number for visual positioning
 // Changes current player
 const takeMove = (column) => {
@@ -25,7 +26,7 @@ const takeMove = (column) => {
       boardArray[i][column] = currentPlayer;
       rowNumber = i + 1;
       currentPlayer *= -1;
-      break;
+      return true;
     }
   }
 };
@@ -35,8 +36,8 @@ function checkForVictory(gameArray = boardArray) {
   const equalityCheck = (cell1, cell2, cell3, cell4) => {
     return cell1 != 0 && cell1 === cell2 && cell1 === cell3 && cell1 === cell4;
   };
-  // Will only check columns or rows where result can exist
-  // Check down
+  // Will only check columns or rows where 4 in a row can exist
+  // Down
   for (let row = 0; row < 3; row++)
     for (column = 0; column < 7; column++)
       if (
@@ -48,7 +49,7 @@ function checkForVictory(gameArray = boardArray) {
         )
       )
         return gameArray[row][column];
-  // Check right
+  //  Right
   for (let row = 0; row < 6; row++)
     for (column = 0; column < 4; column++)
       if (
@@ -60,7 +61,7 @@ function checkForVictory(gameArray = boardArray) {
         )
       )
         return gameArray[row][column];
-  // Check diagonal right
+  // Diagonal right
   for (let row = 0; row < 3; row++)
     for (column = 0; column < 4; column++)
       if (
@@ -72,7 +73,7 @@ function checkForVictory(gameArray = boardArray) {
         )
       )
         return gameArray[row][column];
-  // Check diagonal left
+  // Diagonal left
   for (let row = 3; row < 6; row++)
     for (column = 0; column < 4; column++)
       if (

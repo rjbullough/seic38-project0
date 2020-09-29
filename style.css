@@ -1,18 +1,23 @@
+* {
+  box-sizing: border-box;
+}
 #token-drop-zone {
-  height: 50px;
+  height: 70px;
   margin: 0 auto;
-  position: absolute;
 }
 #game-board {
-  width: 500px;
-  height: 500px;
+  width: 498px;
+  height: 426px;
+  top: 71px;
+  border-radius: 9%;
   margin: 0 auto;
   position: relative;
+  background-color: rgb(252, 213, 166);
 }
 .disc {
   position: absolute;
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   transition: all ease-out 0.3s;
 }
