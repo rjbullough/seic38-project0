@@ -1,4 +1,5 @@
 let currentColumn;
+
 // Stores a column number based on mouse position
 // Provides a visual cue for the current player and the column they're over
 const showCurrentColumn = (e) => {
@@ -13,7 +14,7 @@ const showCurrentColumn = (e) => {
 const tokenVisualCue = () => {
   $("#token-drop-zone")
     .css({
-      top: "4px",
+      top: "130px",
       left: function () {
         return `${$gameBoard.offset().left + 71 * currentColumn}px`;
       },
@@ -23,8 +24,12 @@ const tokenVisualCue = () => {
     })
     .addClass("disc");
 };
+
 // If viable, updates the game board with that player's move
 const placeToken = () => {
+  if (movesTaken === 41) {
+    alert("Yibidda Yibidda, that's all folks");
+  }
   if (takeMove(currentColumn)) {
     $("<div>")
       .addClass(function () {
