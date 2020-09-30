@@ -1,3 +1,4 @@
+let currentColumn;
 // Stores a column number based on mouse position
 // Provides a visual cue for the current player and the column they're over
 const showCurrentColumn = (e) => {
@@ -7,6 +8,9 @@ const showCurrentColumn = (e) => {
     : currentColumn > 6
     ? (currentColumn = 6)
     : currentColumn;
+  tokenVisualCue();
+};
+const tokenVisualCue = () => {
   $("#token-drop-zone")
     .css({
       top: "4px",
@@ -19,8 +23,7 @@ const showCurrentColumn = (e) => {
     })
     .addClass("disc");
 };
-
-// Updates the game board with the player's move if a space is available
+// If viable, updates the game board with that player's move
 const placeToken = () => {
   if (takeMove(currentColumn)) {
     $("<div>")
@@ -36,30 +39,28 @@ const placeToken = () => {
         },
       })
       .appendTo($gameBoard);
-    checkForVictory();
-    if (winningPlayer === 1 || winningPlayer === -1) {
-      winningPlayer === 1 ? ggNoRe(1) : ggNoRe(2);
+    if (winningPlayer != 0) {
+      gg(winningPlayer);
     }
   }
 };
 
 // Victory state - displays who's won the game
-const ggNoRe = (player) => {
+const gg = (player) => {
   $(document).off("click");
   const background = () => {
     return player === 1 ? `rgb(230, 93, 93)` : `rgb(90, 90, 194)`;
   };
-  const $victoryScreen = $("<div>");
   const $victoryMessage = $("<p>").html(
     `<span>Player ${player}!</span> <br>*chef's kiss*`
   );
-  const $reload = $("<img>").attr("src", "images/reload.png");
   $victoryMessage.css({
     "font-family": `'Pacifico', cursive`,
     "font-size": "3em",
     "text-align": "center",
   });
-  $victoryScreen
+  const $reload = $("<img>").attr("src", "images/reload.png");
+  $("<div>")
     .css({
       "background-color": background(),
       position: "absolute",

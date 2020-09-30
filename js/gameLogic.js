@@ -1,89 +1,108 @@
 let currentPlayer = 1,
   rowNumber,
-  winningPlayer,
+  winningPlayer = 0,
+  movesTaken = 0,
   $gameBoard;
 const boardArray = [];
 
 const setTheScene = () => {
   $gameBoard = $("#game-board");
-  $gameBoard.html("");
-  for (let i = 0; i < 6; i++) {
-    boardArray[i] = [];
-    for (let j = 0; j < 7; j++) {
-      boardArray[i].push(0);
-    }
+  while (boardArray.length < 6) {
+    boardArray.push([]);
   }
+  boardArray.forEach((row) => {
+    while (row.length < 7) {
+      row.push(0);
+    }
+  });
 };
 
-// Fills the first available row in the specified column with the current player's token
-// Stores row number for visual positioning
-// Changes current player
+// Places token in the first available row of the passed column, checks for victory
+// Stores row number for visual positioning in renderGame.js
 const takeMove = (column) => {
   for (let i = boardArray.length - 1; i >= 0; i--) {
     if (boardArray[i][column] === 0) {
       boardArray[i][column] = currentPlayer;
+      movesTaken++;
       rowNumber = i + 1;
-      currentPlayer *= -1;
+      currentPlayer = (currentPlayer % 2) + 1;
+      checkForVictory();
       return true;
     }
   }
 };
 
-// Iterates over the game board, returns winning player if found
-function checkForVictory(gameArray = boardArray) {
-  const equalityCheck = (index1, index2, index3, index4) => {
-    return (
-      index1 != 0 && index1 === index2 && index1 === index3 && index1 === index4
-    );
-  };
-  // Will only check columns or rows where 4 in a row can exist
-  // Down
+// Checks if all tokens belong to the same player
+const equalityCheck = (index1, index2, index3, index4) => {
+  return (
+    index1 != 0 && index1 === index2 && index1 === index3 && index1 === index4
+  );
+};
+
+// Search the top 4 rows for a vertical match
+const searchDown = () => {
   for (let row = 0; row < 3; row++)
-    for (column = 0; column < 7; column++)
+    for (let column = 0; column < 7; column++)
       if (
         equalityCheck(
-          gameArray[row][column],
-          gameArray[row + 1][column],
-          gameArray[row + 2][column],
-          gameArray[row + 3][column]
+          boardArray[row][column],
+          boardArray[row + 1][column],
+          boardArray[row + 2][column],
+          boardArray[row + 3][column]
         )
       )
-        winningPlayer = gameArray[row][column];
-  //  Right
+        winningPlayer = boardArray[row][column];
+};
+
+// Search the left 4 columns for a horizontal match
+const searchRight = () => {
   for (let row = 0; row < 6; row++)
-    for (column = 0; column < 4; column++)
+    for (let column = 0; column < 4; column++)
       if (
         equalityCheck(
-          gameArray[row][column],
-          gameArray[row][column + 1],
-          gameArray[row][column + 2],
-          gameArray[row][column + 3]
+          boardArray[row][column],
+          boardArray[row][column + 1],
+          boardArray[row][column + 2],
+          boardArray[row][column + 3]
         )
       )
-        winningPlayer = gameArray[row][column];
-  // Diagonal right
+        winningPlayer = boardArray[row][column];
+};
+
+// Search the top 3 rows, starting from the left, for a diagonal match
+const searchDiagonalRight = () => {
   for (let row = 0; row < 3; row++)
-    for (column = 0; column < 4; column++)
+    for (let column = 0; column < 4; column++)
       if (
         equalityCheck(
-          gameArray[row][column],
-          gameArray[row + 1][column + 1],
-          gameArray[row + 2][column + 2],
-          gameArray[row + 3][column + 3]
+          boardArray[row][column],
+          boardArray[row + 1][column + 1],
+          boardArray[row + 2][column + 2],
+          boardArray[row + 3][column + 3]
         )
       )
-        winningPlayer = gameArray[row][column];
-  // Diagonal left
+        winningPlayer = boardArray[row][column];
+};
+
+// Search the top 3 rows, starting from the right, for a diagonal match
+const searchDiagonalLeft = () => {
   for (let row = 3; row < 6; row++)
-    for (column = 0; column < 4; column++)
+    for (let column = 0; column < 4; column++)
       if (
         equalityCheck(
-          gameArray[row][column],
-          gameArray[row - 1][column + 1],
-          gameArray[row - 2][column + 2],
-          gameArray[row - 3][column + 3]
+          boardArray[row][column],
+          boardArray[row - 1][column + 1],
+          boardArray[row - 2][column + 2],
+          boardArray[row - 3][column + 3]
         )
       )
-        winningPlayer = gameArray[row][column];
+        winningPlayer = boardArray[row][column];
+};
+
+const checkForVictory = () => {
+  searchDown();
+  searchRight();
+  searchDiagonalRight();
+  searchDiagonalLeft();
   return winningPlayer;
-}
+};
