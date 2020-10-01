@@ -30,7 +30,7 @@ const placeToken = () => {
   if (movesTaken === 41) {
     alert("Yibidda Yibidda, that's all folks");
   }
-  if (takeMove(currentColumn)) {
+  if (takeMove(currentColumn) && winningPlayer === 0) {
     $("<div>")
       .addClass(function () {
         return currentPlayer === 1 ? `player2 disc` : `player1 disc`; // function has run and updated player already, logic swapped
@@ -44,9 +44,9 @@ const placeToken = () => {
         },
       })
       .appendTo($gameBoard);
-    if (winningPlayer != 0) {
-      gg(winningPlayer);
-    }
+  }
+  if (winningPlayer != 0) {
+    gg(winningPlayer);
   }
 };
 
@@ -65,6 +65,7 @@ const gg = (player) => {
     "text-align": "center",
   });
   const $reload = $("<img>").attr("src", "images/reload.png");
+  // Div that fills entire screen with winning message
   $("<div>")
     .css({
       "background-color": background(),
@@ -81,6 +82,7 @@ const gg = (player) => {
     })
     .append($victoryMessage, $reload)
     .prependTo($("body"));
+  // style and add function to recently added elements
   $("span").css({
     "font-family": `'Bangers', cursive`,
     "letter-spacing": "3px",
@@ -91,9 +93,7 @@ const gg = (player) => {
       cursor: "pointer",
     });
   });
-  $("img").on("click", function () {
-    location.reload();
-  });
+  $("img").on("click", replay);
 };
 $(document).ready(setTheScene);
 $(document).on("mousemove", showCurrentColumn);

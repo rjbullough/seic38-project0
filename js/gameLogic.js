@@ -5,16 +5,30 @@ let currentPlayer = 1,
   $gameBoard;
 const boardArray = [];
 
+// Initialise empty game array
 const setTheScene = () => {
+  boardArray.length = 0;
   $gameBoard = $("#game-board");
-  while (boardArray.length < 6) {
-    boardArray.push([]);
-  }
-  boardArray.forEach((row) => {
-    while (row.length < 7) {
-      row.push(0);
+  for (let i = 0; i < 6; i++) {
+    boardArray[i] = [];
+    for (let j = 0; j < 7; j++) {
+      boardArray[i].push(0);
     }
-  });
+  }
+};
+
+// Resets beginning game state
+const replay = () => {
+  currentPlayer = 1;
+  winningPlayer = 0;
+  movesTaken = 0;
+  setTheScene();
+  $("#game-board").empty();
+  $("div").first().remove();
+  // Prevents placing a token when clicking restart
+  setTimeout(function () {
+    $(document).on("click", placeToken);
+  }, 700);
 };
 
 // Places token in the first available row of the passed column, checks for victory
@@ -39,7 +53,7 @@ const equalityCheck = (index1, index2, index3, index4) => {
   );
 };
 
-// Search the top 4 rows for a vertical match
+// Search the top 3 rows for a vertical match
 const searchDown = () => {
   for (let row = 0; row < 3; row++)
     for (let column = 0; column < 7; column++)
