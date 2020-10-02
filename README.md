@@ -2,6 +2,8 @@
 
 ## The **least** enjoyable 2 player game since it's inception in 1974
 
+## https://rjbullough.github.io/seic38-project0/
+
 ### Technologies used
 
 This version of connect 4 uses javascript (and the JQuery plugin) to let 2 players alternatively place tokens on a 6 x 7 game board.

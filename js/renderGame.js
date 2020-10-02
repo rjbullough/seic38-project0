@@ -2,7 +2,7 @@ let currentColumn;
 
 // Stores a column number based on mouse position
 // Provides a visual cue for the current player and the column they're over
-const showCurrentColumn = (e) => {
+const whereAmI = (e) => {
   currentColumn = Math.floor((e.clientX - $gameBoard.offset().left) / 70);
   currentColumn < 0
     ? (currentColumn = 0)
@@ -96,5 +96,5 @@ const gg = (player) => {
   $("img").on("click", replay);
 };
 $(document).ready(setTheScene);
-$(document).on("mousemove", showCurrentColumn);
+$(document).on("mousemove", whereAmI);
 $(document).on("click", placeToken);
